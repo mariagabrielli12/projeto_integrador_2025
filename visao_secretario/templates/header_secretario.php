@@ -9,14 +9,58 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
+// Inclui o ficheiro de conexão com o banco de dados
+require_once PROJECT_ROOT . '/conexao.php';
+
+// =========================================================
+// --- FUNÇÕES DE CRIPTOGRAFIA ADICIONADAS AQUI ---
+// =========================================================
+if (!defined('CODIFICACAO_SECRETA')) {
+    define('CODIFICACAO_SECRETA', 'sua-chave-secreta-muito-forte-de-32-bytes');
+}
+if (!defined('ENCRYPTION_METHOD')) {
+    define('ENCRYPTION_METHOD', 'AES-256-CBC');
+}
+
+if (!function_exists('codificar_dado')) {
+    function codificar_dado($data) {
+        if (empty($data)) return $data;
+        $key = hash('sha256', CODIFICACAO_SECRETA);
+        $iv_length = openssl_cipher_iv_length(ENCRYPTION_METHOD);
+        $iv = openssl_random_pseudo_bytes($iv_length);
+        $ciphertext = openssl_encrypt($data, ENCRYPTION_METHOD, $key, 0, $iv);
+        return base64_encode($iv . $ciphertext);
+    }
+}
+
+if (!function_exists('decodificar_dado')) {
+    function decodificar_dado($encoded_data) {
+        if (empty($encoded_data)) return 'Não informado';
+        $data_decoded = base64_decode($encoded_data, true);
+        $iv_length = openssl_cipher_iv_length(ENCRYPTION_METHOD);
+        if ($data_decoded === false || strlen($data_decoded) <= $iv_length) {
+            return $encoded_data; 
+        }
+        $key = hash('sha256', CODIFICACAO_SECRETA);
+        $iv = substr($data_decoded, 0, $iv_length);
+        $ciphertext = substr($data_decoded, $iv_length);
+        $decrypted_data = openssl_decrypt($ciphertext, ENCRYPTION_METHOD, $key, 0, $iv);
+        if ($decrypted_data === false) {
+            return "Erro ao decodificar";
+        }
+        return $decrypted_data;
+    }
+}
+// =========================================================
+// --- FIM DAS FUNÇÕES DE CRIPTOGRAFIA ---
+// =========================================================
+
+
 // ---- VERIFICAÇÃO DE SEGURANÇA ----
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true || $_SESSION["perfil"] !== 'Secretario') {
     header("location: ../../tela_login/index.php");
     exit;
 }
-
-// Inclui o ficheiro de conexão com o banco de dados
-require_once PROJECT_ROOT . '/conexao.php';
 
 // Pega os dados do utilizador da sessão
 $id_secretario_logado = $_SESSION['id_usuario'];
