@@ -1,15 +1,12 @@
 <?php
+// --- CORREÇÃO: MOVIDO PARA O TOPO ---
 if (!defined('PROJECT_ROOT')) {
     define('PROJECT_ROOT', dirname(dirname(__DIR__)));
 }
-// Inclui a conexão e inicia a sessão ANTES de qualquer HTML
-require_once PROJECT_ROOT . '/conexao.php';
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
+// O header agora inclui a conexão, inicia a sessão E define as funções de criptografia
+require_once PROJECT_ROOT . '/visao_secretario/templates/header_secretario.php';
+// --- FIM DA CORREÇÃO ---
 
-// AS FUNÇÕES DE CRIPTOGRAFIA (codificar/decodificar_dado) FORAM REMOVIDAS DAQUI
-// Elas devem ser carregadas a partir do seu 'conexao.php' ou 'header_secretario.php'
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id_aluno = $_POST['id_aluno'] ?: null;
@@ -17,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $data_nascimento = $_POST['data_nascimento'];
     $id_turma = $_POST['id_turma'];
     
-    // Usa a função de codificação global (openssl)
+    // Agora a função codificar_dado() EXISTE e pode ser chamada
     $rg = codificar_dado($_POST['rg']); 
     $cpf = codificar_dado($_POST['cpf']); 
     
@@ -66,9 +63,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
+// O header já foi incluído no topo, então definimos as variáveis da página aqui
 $page_title = 'Cadastro de Aluno';
 $page_icon = 'fas fa-user-graduate';
-require_once PROJECT_ROOT . '/visao_secretario/templates/header_secretario.php';
 
 $aluno = ['id_aluno' => null, 'nome_completo' => '', 'data_nascimento' => '', 'rg' => '', 'cpf' => '', 'id_turma' => '', 'cep' => '', 'logradouro' => '', 'numero' => '', 'bairro' => '', 'cidade' => '', 'estado' => ''];
 $matricula_responsavel = '';
@@ -91,7 +88,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     if ($result->num_rows === 1) {
         $aluno_data = $result->fetch_assoc();
         
-        // Usa a função de decodificação global (openssl)
+        // A função decodificar_dado() agora existe
         $aluno_data['rg'] = decodificar_dado($aluno_data['rg']);
         $aluno_data['cpf'] = decodificar_dado($aluno_data['cpf']);
         
@@ -106,7 +103,7 @@ $turmas_result = $conexao->query("SELECT id_turma, nome_turma FROM turmas ORDER 
 
 <div class="card">
     <div class="card-header">
-        <h3 class="section-title">Dados do Aluno</h3>
+        <h3 class="section-title"><?php echo $page_title; // Título dinâmico ?></h3>
     </div>
     <div class="card-body">
         <form method="POST" action="Cadastro_Alunos.php<?php echo $is_edit_mode ? '?id=' . htmlspecialchars($aluno['id_aluno'] ?? '') : ''; ?>">
@@ -114,7 +111,7 @@ $turmas_result = $conexao->query("SELECT id_turma, nome_turma FROM turmas ORDER 
             
             <div class="form-group"><label>Nome Completo*</label><input type="text" name="nome_completo" value="<?php echo htmlspecialchars($aluno['nome_completo'] ?? ''); ?>" required></div>
             <div class="form-row">
-                <div class="form-group"><label>RG</label><input type="text" name="rg" value="<?php echo htmlspecialchars($aluno['rg'] ?? ''); ?>"></div>
+                <div class="form-group"><label for="rg">RG</label><input type="text" id="rg" name="rg" value="<?php echo htmlspecialchars($aluno['rg'] ?? ''); ?>"></div>
                 <div class="form-group"><label for="cpf">CPF</label><input type="text" id="cpf" name="cpf" value="<?php echo htmlspecialchars($aluno['cpf'] ?? ''); ?>"></div>
             </div>
             <div class="form-group"><label>Data de Nascimento*</label><input type="date" name="data_nascimento" value="<?php echo htmlspecialchars($aluno['data_nascimento'] ?? ''); ?>" required></div>
@@ -162,6 +159,7 @@ $turmas_result = $conexao->query("SELECT id_turma, nome_turma FROM turmas ORDER 
     document.addEventListener('DOMContentLoaded', function() {
         IMask(document.getElementById('cpf'), { mask: '000.000.000-00' });
         IMask(document.getElementById('cep'), { mask: '00000-000' });
+        IMask(document.getElementById('rg'), { mask: '00.000.000-0' }); 
     });
 </script>
 

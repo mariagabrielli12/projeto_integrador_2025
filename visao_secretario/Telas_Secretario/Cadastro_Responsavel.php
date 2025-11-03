@@ -1,25 +1,21 @@
 <?php
-
+// --- CORREÇÃO: MOVIDO PARA O TOPO ---
 if (!defined('PROJECT_ROOT')) {
      define('PROJECT_ROOT', dirname(dirname(__DIR__)));
 }
+// O header agora inclui a conexão, inicia a sessão E define as funções de criptografia
+require_once PROJECT_ROOT . '/visao_secretario/templates/header_secretario.php';
+// --- FIM DA CORREÇÃO ---
 
-require_once PROJECT_ROOT . '/conexao.php';
-if (session_status() == PHP_SESSION_NONE) {
-     session_start();
-}
-
-// AS FUNÇÕES DE CRIPTOGRAFIA (codificar/decodificar_dado) FORAM REMOVIDAS DAQUI
-// Elas devem ser carregadas a partir do seu 'conexao.php' ou 'header_secretario.php'
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
      $conexao->begin_transaction();
      try {
          $id_responsavel = $_POST['id_usuario'] ?: null;
-         $senha = $_POST['senha']; // Espaço inválido removido daqui
+         $senha = $_POST['senha']; 
          $tipo_id = 5; 
 
-        // Usa a função de codificação global (openssl)
+        // Agora a função codificar_dado() EXISTE e pode ser chamada
         $nome_codificado = codificar_dado($_POST['nome_completo']);
         $cpf_codificado = codificar_dado($_POST['cpf']);
         $rg_codificado = codificar_dado($_POST['rg']);
@@ -28,11 +24,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $email = $_POST['email']; 
         $matricula = $_POST['matricula']; 
 
-                // Lógica para atualizar a senha apenas se uma nova for fornecida
-            if (!empty($senha)) {
-                // --- ALTERAÇÃO PARA MD5 ---
-                $senha_hash = md5($senha);
-                $sql = "UPDATE usuarios SET nome_completo=?, cpf=?, email=?, telefone=?, matricula=?, ativo=?, senha_hash=? WHERE id_usuario=?";
+            if ($id_responsavel) {
+             if (!empty($senha)) {
+             $senha_hash = md5($senha); // Usando md5 como definido anteriormente
+                
+             $stmt_user = $conexao->prepare("UPDATE usuarios SET nome_completo=?, cpf=?, rg=?, email=?, telefone=?, matricula=?, senha_hash=? WHERE id_usuario=?");
              $stmt_user->bind_param("sssssssi", $nome_codificado, $cpf_codificado, $rg_codificado, $email, $telefone_codificado, $matricula, $senha_hash, $id_responsavel);
              } else {
              
@@ -43,8 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
              if (empty($senha)) {
              throw new Exception("A senha é obrigatória para novos responsáveis.");
             }
-             // --- ALTERAÇÃO PARA MD5 ---
-             $senha_hash = md5($senha);
+             $senha_hash = md5($senha); // Usando md5 como definido anteriormente
              $stmt_user = $conexao->prepare("INSERT INTO usuarios (nome_completo, cpf, rg, email, telefone, matricula, senha_hash, id_tipo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             $stmt_user->bind_param("sssssssi", $nome_codificado, $cpf_codificado, $rg_codificado, $email, $telefone_codificado, $matricula, $senha_hash, $tipo_id);
          }
@@ -91,9 +86,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
      }
 }
 
+// O header já foi incluído no topo
 $page_title = 'Cadastro de Responsável';
 $page_icon = 'fas fa-user-tie';
-require_once PROJECT_ROOT . '/visao_secretario/templates/header_secretario.php';
 
 $responsavel = ['id_usuario' => null, 'nome_completo' => '', 'cpf' => '', 'rg' => '', 'data_nascimento' => '', 'email' => '', 'telefone' => '', 'matricula' => ''];
 $endereco = ['id_endereco' => null, 'logradouro' => '', 'cep' => '', 'numero' => '', 'complemento' => '', 'bairro' => '', 'cidade' => '', 'estado' => ''];
@@ -111,7 +106,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
      if ($result->num_rows > 0) {
          $data = $result->fetch_assoc();
      
-        // Usa a função de decodificação global (openssl)
+        // A função decodificar_dado() agora existe
         $data['nome_completo'] = decodificar_dado($data['nome_completo']);
         $data['cpf'] = decodificar_dado($data['cpf']);
         $data['rg'] = decodificar_dado($data['rg']);
@@ -128,7 +123,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
 <div class="card">
     <div class="card-header">
-        <h3 class="section-title">Dados do Responsável</h3>
+        <h3 class="section-title"><?php echo $page_title; // Título dinâmico ?></h3>
     </div>
     <div class="card-body">
          <form id="form-responsavel" method="POST" action="Cadastro_Responsavel.php<?php echo $is_edit_mode ? '?id=' . htmlspecialchars($responsavel['id_usuario'] ?? '') : ''; ?>">
