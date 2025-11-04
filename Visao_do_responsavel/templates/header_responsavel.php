@@ -118,8 +118,11 @@ function is_active($page_names) {
       <li class="menu-item <?php echo is_active(['relatorios_responsavel.php', 'detalhe_relatorio.php']); ?>">
           <a href="relatorios_responsavel.php"><i class="fas fa-chart-line"></i><span>Desenvolvimento</span></a>
       </li>
+      
     </ul>
-
+    <div class="menu-item">
+    <a href="../tela_login/habilitar_2fa.php"><i class="fas fa-shield-alt"></i><span>Segurança (2FA)</span></a>
+</div>
     <div class="logout">
             <a href="../tela_login/logout.php" style="color:inherit; text-decoration:none;"><i class="fas fa-sign-out-alt"></i><span>Sair</span></a>
     </div>
