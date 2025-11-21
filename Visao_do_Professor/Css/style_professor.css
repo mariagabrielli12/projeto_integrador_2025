@@ -1,0 +1,907 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;500;600&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
+:root {
+    --primary: #2c3e50;
+ --primary-light: #4c748f;  /* <-- AZUL MAIS SUAVE */
+    --primary-dark: #4a7c9b;
+    --text: #333333;
+    --border: #e9ecef;
+    --sidebar-bg: #34495e;
+    --header-bg: #2c3e50;
+    --success: #27ae60;
+    --danger: #c0392b;
+    --background: #f8f9fa;
+}
+
+/* Estilo para títulos H4 dentro de containers de tabela */
+.table-container > h4 {
+    padding: 10px 15px; /* 10px na vertical, 15px na horizontal */
+    margin: 0;
+    background-color: #f8f9fa; /* Mesma cor do card-header */
+    border-bottom: 1px solid var(--border);
+    font-size: 16px; 
+    font-weight: 600;
+    color: var(--primary);
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px;
+}
+
+body {
+    display: flex;
+    background-color: var(--background);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+a { text-decoration: none; color: inherit; }
+
+/* --- Estrutura Principal --- */
+.sidebar {
+    width: 240px;
+    background: var(--sidebar-bg);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+.logo { 
+    padding: 15px; 
+    background: var(--header-bg); 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+}
+
+.logo h1 { 
+    font-size: 16px; 
+    font-weight: 600; 
+}
+
+.logo i { 
+    font-size: 18px; 
+    color: var(--primary-light); 
+}
+
+.main-content { 
+    flex-grow: 1; 
+    display: flex; 
+    flex-direction: column; 
+}
+
+.header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 12px 25px; 
+    background: white; 
+    border-bottom: 1px solid var(--border); 
+}
+
+.page-title { 
+    font-size: 18px; 
+    color: var(--primary); 
+    font-weight: 600; 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+}
+
+.page-title i { 
+    color: var(--primary-light); 
+}
+
+.user-info { 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+}
+
+.user-avatar { 
+    width: 35px; 
+    height: 35px; 
+    border-radius: 50%; 
+    background: var(--primary-light); 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    color: white; 
+    font-weight: bold; 
+}
+
+.content-container { 
+    padding: 25px; 
+    flex-grow: 1; 
+    overflow-y: auto; 
+}
+
+/* --- Menu Lateral (Padronizado) --- */
+.menu { 
+    flex-grow: 1; 
+    list-style: none; 
+}
+
+.menu-section-title { 
+    padding: 10px 20px 5px; 
+    color: #95a5a6; 
+    font-size: 12px; 
+    text-transform: uppercase; 
+    font-weight: 500; 
+}
+
+.menu-item a { 
+    display: flex; 
+    align-items: center; 
+    gap: 12px; 
+    padding: 12px 20px; 
+    transition: all 0.2s; 
+    font-weight: 500; 
+}
+
+.menu-item.active a { 
+    background: rgba(52, 152, 219, 0.2); 
+    border-left: 4px solid var(--primary-light); 
+    padding-left: 16px; 
+}
+
+.menu-item a:hover { 
+    background: rgba(255, 255, 255, 0.1); 
+}
+
+.menu-item i { 
+    width: 20px; 
+    text-align: center; 
+    font-size: 16px; 
+}
+
+.logout {
+    padding: 10px 15px;
+    margin: 15px;
+    text-align: center;
+    border-radius: 6px;
+    background-color: rgba(0,0,0,0.2);
+}
+
+/* --- Componentes --- */
+.card { 
+    background: white; 
+    border: 1px solid var(--border); 
+    border-radius: 8px; 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+    margin-bottom: 20px; 
+}
+
+.card-header { 
+    padding: 15px 20px; 
+    border-bottom: 1px solid var(--border); 
+    background: #f8f9fa;
+}
+
+.section-title { 
+    font-size: 18px; 
+    color: var(--primary); 
+    margin: 0; 
+    font-weight: 600;
+}
+
+.card-body { 
+    padding: 20px; 
+}
+
+/* --- Formulários (Necessários para as páginas) --- */
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+.form-group {
+    margin-bottom: 20px;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+.form-group input, .form-group select, .form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-light);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 10px;
+}
+.btn, .btn-primary, .btn-secondary {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+.btn-primary {
+    background: var(--primary-dark);
+    color: white;
+}
+.btn-primary:hover {
+    background: var(--primary);
+}
+.btn-secondary {
+    background: #f0f0f0;
+    color: var(--text);
+}
+.btn-secondary:hover {
+    background: #e0e0e0;
+}
+.btn-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #555;
+    padding: 5px;
+}
+.btn-icon:hover {
+    color: var(--primary);
+}
+
+/* --- Tabela (Necessária para as páginas) --- */
+.table-container {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+}
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.table th, .table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+}
+.table th {
+    background: #f8f9fa;
+    font-weight: 600;
+}
+.table tr:last-child td {
+    border-bottom: none;
+}
+.table tr:hover {
+    background: #f1f5f9;
+}
+
+
+/* --- Dashboard do Professor --- */
+.welcome-banner {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.welcome-banner h3 {
+    color: var(--primary);
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.welcome-banner p {
+    color: #666;
+    font-size: 14px;
+}
+
+.welcome-banner p span {
+    font-weight: 600;
+    color: var(--primary-dark);
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.dashboard-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.dashboard-card h4 {
+    color: var(--primary);
+    margin-bottom: 15px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.dashboard-card h4 i {
+    color: var(--primary-light);
+}
+
+.calendar-events {
+    margin-top: 10px;
+}
+
+.event {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.event:last-child {
+    border-bottom: none;
+}
+
+.event-time {
+    color: var(--primary-dark);
+    font-weight: 500;
+    min-width: 80px;
+}
+
+.event-title {
+    color: #666;
+    flex: 1;
+}
+
+.view-all {
+    display: block;
+    text-align: right;
+    margin-top: 15px;
+    color: var(--primary-light);
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.view-all:hover {
+    text-decoration: underline;
+}
+
+.alert-list {
+    margin-top: 10px;
+}
+
+.alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.alert i {
+    color: var(--primary-light);
+    margin-top: 2px;
+}
+
+.alert span {
+    flex: 1;
+    font-size: 14px;
+}
+
+/* --- Atalhos (Dashboard) --- */
+.shortcut-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
+    gap: 15px; 
+}
+
+.shortcut-card { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    text-align: center; 
+    padding: 20px; 
+    border: 1px solid #ddd; 
+    border-radius: 8px; 
+    color: #333; 
+    transition: all 0.2s ease-in-out; 
+    background-color: #f9f9f9;
+    min-height: 120px;
+}
+
+.shortcut-card:hover { 
+    transform: translateY(-3px); 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+}
+
+.shortcut-card i { 
+    font-size: 2em; 
+    margin-bottom: 10px; 
+}
+
+.shortcut-card span { 
+    font-weight: 500; 
+}
+
+/* Cores dos ícones dos atalhos */
+.shortcut-card .blue { color: #3498db; }
+.shortcut-card .green { color: #2ecc71; }
+.shortcut-card .purple { color: #9b59b6; }
+.shortcut-card .orange { color: #f39c12; }
+.shortcut-card .red { color: #e74c3c; }
+.shortcut-card .teal { color: #1abc9c; }
+.shortcut-card .grey { color: #7f8c8d; }
+
+
+/* --- Alertas de Sucesso/Erro --- */
+.alert.success { 
+    padding: 15px; 
+    margin-bottom: 20px; 
+    border-radius: 6px; 
+    font-weight: 500; 
+    background-color: #d4edda; 
+    color: #155724; 
+}
+
+.alert.error { 
+    padding: 15px; 
+    margin-bottom: 20px; 
+    border-radius: 6px; 
+    font-weight: 500; 
+    background-color: #f8d7da; 
+    color: #721c24; 
+}
+
+/* --- Responsividade --- */
+@media (max-width: 768px) {
+    body {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        width: 100%;
+    }
+    
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .shortcut-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+    
+    .content-container {
+        padding: 15px;
+    }
+}
+
+/* ========================================================= */
+/* --- ESTILOS PARA ABAS (TABS) --- */
+/* ========================================================= */
+
+.tab-buttons {
+    display: flex;
+    margin-bottom: 0; /* Ajustado para 0 */
+    border-bottom: 1px solid var(--border);
+    background-color: #f8f9fa; /* Fundo leve para as abas */
+}
+
+.tab-btn {
+    background-color: transparent;
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 1.05em;
+    font-weight: 500;
+    color: var(--text);
+    transition: all 0.3s ease;
+    position: relative;
+    top: 1px; /* Para alinhar com a borda */
+    
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 3px solid transparent; /* Borda transparente por padrão */
+}
+
+.tab-btn:hover {
+    color: var(--primary-dark);
+    background-color: #e9ecef; /* Leve destaque no hover */
+}
+
+.tab-btn.active {
+    color: var(--primary-light);
+    border-bottom: 3px solid var(--primary-light);
+    font-weight: 600;
+    background-color: white; /* Aba ativa fica branca */
+}
+
+/* Estilo para as abas de conteúdo */
+.tab-content {
+    display: none; /* Padrão: oculto */
+    border-top: none; /* Remove borda dupla */
+}
+
+.tab-content.active {
+    display: block; /* Visível quando ativo */
+}
+
+/* Remove o 'card-header' de dentro das abas, pois o botão já é o header */
+.tab-content .card-header {
+    display: none;
+}
+
+/* Ajustes para 'atividades_ludicas.php' */
+.activities-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+.activity-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fdfdfd;
+}
+.activity-header {
+    padding: 10px 15px;
+    background: #f8f9fa;
+    border-bottom: 1px solid var(--border);
+}
+.activity-header h3 {
+    font-size: 16px;
+    color: var(--primary-dark);
+    margin: 0;
+}
+.activity-body {
+    padding: 15px;
+}
+.activity-info {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: #555;
+}
+.activity-info i {
+    color: var(--primary-light);
+    width: 15px;
+    text-align: center;
+}
+
+/* ========================================================= */
+/* --- ESTILOS PARA CARDS DE TURMA (MINHAS TURMAS) --- */
+/* ========================================================= */
+
+.class-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.class-card {
+    background: white;
+    border-radius: 8px; /* Aumentei o raio da borda */
+    border: 1px solid var(--border);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    overflow: hidden;
+    transition: all 0.2s ease; /* Adiciona transição suave */
+}
+
+.class-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.class-header {
+    padding: 15px;
+    background: var(--primary-light);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.class-header h3 {
+    font-size: 16px;
+    margin: 0;
+    font-weight: 600;
+}
+
+.class-period {
+    background: rgba(255,255,255,0.2);
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+}
+
+.class-body {
+    padding: 15px;
+}
+
+.class-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-size: 13px;
+    color: #555; /* Cor de texto mais suave */
+}
+
+.class-info i {
+    color: var(--primary-light);
+    width: 20px;
+    text-align: center;
+}
+
+.class-footer {
+    padding: 15px;
+    border-top: 1px solid var(--border);
+    background-color: #f8f9fa; /* Fundo leve para o rodapé */
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+/* ========================================================= */
+/* --- ESTILOS PARA DETALHES DA TURMA (LISTA DE ALUNOS) --- */
+/* ========================================================= */
+
+.student-grid {
+    display: grid;
+    /* Cria colunas automáticas de 180px, preenchendo o espaço */
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+}
+
+.student-card {
+    background: #f9f9f9;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.student-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.student-card p {
+    font-weight: 500;
+    color: var(--text);
+    margin: 0;
+}
+
+.student-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    /* Usa o azul suave que definimos */
+    background: var(--primary-light); 
+    color: white;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px auto;
+    font-size: 1.2em;
+}
+
+.btn-profile {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 6px 12px;
+    /* Usa o azul suave */
+    background-color: var(--primary-light);
+    color: white;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+.btn-profile:hover {
+    /* Usa o tom mais escuro do azul suave */
+    background-color: var(--primary-dark);
+}
+
+
+/* ========================================================= */
+/* --- ESTILOS PARA GERENCIAR TURMA (DIÁRIO) --- */
+/* ========================================================= */
+
+/* Tabela de Presença */
+.attendance-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.attendance-table th,
+.attendance-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+}
+
+.attendance-table th {
+    background: #f8f9fa;
+    font-weight: 600;
+}
+
+.attendance-table tr:hover {
+    background: #f1f5f9;
+}
+
+.attendance-table td:first-child {
+    width: 60%;
+    font-weight: 500;
+    color: var(--primary-dark);
+}
+
+.attendance-table label {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    margin-right: 15px;
+    font-size: 14px;
+}
+
+.attendance-table input[type="radio"] {
+    width: auto;
+}
+
+/* Tabela de Registro Diário */
+.daily-log-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.daily-log-table th,
+.daily-log-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    vertical-align: top; /* Alinha no topo para os textareas */
+}
+
+.daily-log-table th {
+    background: #f8f9fa;
+    font-weight: 600;
+}
+
+.daily-log-table td:first-child {
+    width: 25%; /* Largura para o nome do aluno */
+    font-weight: 500;
+    color: var(--primary-dark);
+    vertical-align: middle; /* Centraliza o nome do aluno */
+}
+
+.daily-log-table textarea {
+    width: 100%;
+    height: 70px; /* Altura padrão pequena */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    transition: all 0.2s;
+    font-size: 13px;
+    resize: vertical; /* Permite ao usuário aumentar se precisar */
+}
+
+.daily-log-table textarea:focus {
+    border-color: var(--primary-light);
+    /* Sombra com o novo azul */
+    box-shadow: 0 0 0 3px rgba(92, 150, 189, 0.2); 
+    outline: none;
+}
+
+/* Estilo para a linha do aluno ausente (baseado no JS) */
+.daily-log-table tr[style*="opacity: 0.5"] {
+    pointer-events: none; /* Desativa cliques */
+    background-color: #f9f9f9;
+}
+
+.daily-log-table tr[style*="opacity: 0.5"] textarea {
+    background-color: #f1f1f1;
+}
+
+/* ========================================================= */
+/* --- ESTILOS BOOTSTRAP (para relatorio_frequencia.php) --- */
+/* ========================================================= */
+
+/* Classes de Grid/Layout para o Filtro */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px; /* Compensa o padding dos cols */
+    margin-left: -15px;
+}
+.col-md-6, .col-md-4, .col-md-2 {
+    position: relative;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+/* Define as larguras para telas médias (md) e acima */
+@media (min-width: 768px) {
+    .col-md-6 { flex: 0 0 50%; max-width: 50%; }
+    .col-md-4 { flex: 0 0 33.333333%; max-width: 33.333333%; }
+    .col-md-2 { flex: 0 0 16.666667%; max-width: 16.666667%; }
+}
+.d-flex { display: flex !important; }
+.align-items-end { align-items: flex-end !important; }
+.w-100 { width: 100% !important; }
+
+/* Classes de Formulário para o Filtro */
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+.form-control, .form-select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    transition: all 0.2s;
+    font-size: 14px;
+    line-height: 1.5;
+    background-color: #fff; /* Fundo branco para selects */
+}
+.form-control:focus, .form-select:focus {
+    outline: none;
+    border-color: var(--primary-light);
+    box-shadow: 0 0 0 3px rgba(92, 150, 189, 0.2); /* Usa o azul suave */
+}
+
+/* Classes de Tabela para o Relatório */
+.table-responsive {
+    overflow-x: auto;
+}
+.table-bordered {
+    border: 1px solid var(--border);
+}
+.table-bordered th, .table-bordered td {
+    border: 1px solid var(--border);
+}
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0,0,0,0.02); /* Fundo listrado suave */
+}
+.table-light th, .table th.table-light {
+    background-color: #f8f9fa;
+    color: var(--primary-dark);
+}
+
+/* Classes de Texto (Alinhamento e Cor) */
+.text-center { text-align: center !important; }
+.text-start { text-align: left !important; }
+.text-success { color: var(--success) !important; } /* Verde */
+.text-danger { color: var(--danger) !important; } /* Vermelho */
+
+/* Classes de Espaçamento (Margem) */
+.mb-0 { margin-bottom: 0 !important; }
+.mb-3 { margin-bottom: 1rem !important; } /* 1rem = 14px-16px */
+.mb-4 { margin-bottom: 1.5rem !important; }
+.mt-3 { margin-top: 1rem !important; }
+.ms-2 { margin-left: 0.5rem !important; }
